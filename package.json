@@ -1,0 +1,59 @@
+{
+	"name": "set-timeout-worker",
+	"description": "A dedicated web-worker for the `setTimeout` method. Client only. No server required.",
+	"version": "0.0.1",
+	"license": "MIT",
+	"module": "./dist/index.js",
+	"files": [
+		"dist",
+		"src"
+	],
+	"homepage": "https://github.com/taitulism/set-timeout-worker#readme",
+	"repository": "github:taitulism/set-timeout-worker",
+	"author": "Taitu Lizenbaum <taitu.dev@gmail.com>",
+	"scripts": {
+		"dev": "rollup --config rollup.config.js --watch",
+		"build": "tsc --project tsconfig.build.json",
+		"test": "karma start karma.conf.js",
+		"karma": "npm run test -- --no-single-run --auto-watch",
+		"lint": "eslint ./src/**/*.ts ./tests/**/*.ts",
+		"check": "npm run lint && npm test",
+		"play": "node ./playground/play.js",
+		"prepublishOnly": "npm run build",
+		"preversion": "npm run check",
+		"postversion": "git push && git push --tags"
+	},
+	"devDependencies": {
+		"@rollup/plugin-commonjs": "^18.0.0",
+		"@rollup/plugin-node-resolve": "^11.2.1",
+		"@rollup/plugin-typescript": "^8.2.1",
+		"@types/chai": "^4.2.16",
+		"@types/mocha": "^8.2.2",
+		"@types/sinon": "^10.0.0",
+		"@typescript-eslint/eslint-plugin": "^4.22.0",
+		"@typescript-eslint/parser": "^4.22.0",
+		"chai": "^4.3.4",
+		"chai-as-promised": "^7.1.1",
+		"eslint": "^7.25.0",
+		"karma": "^6.3.2",
+		"karma-chai": "^0.1.0",
+		"karma-chrome-launcher": "^3.1.0",
+		"karma-mocha": "^2.0.1",
+		"karma-mocha-reporter": "^2.2.5",
+		"karma-rollup-preprocessor": "^7.0.7",
+		"karma-sinon": "^1.0.5",
+		"mocha": "^8.3.2",
+		"rollup": "^2.45.2",
+		"sinon": "^10.0.0",
+		"tslib": "^2.2.0",
+		"typescript": "^4.2.4"
+	},
+	"keywords": [
+		"setTimeout",
+		"timeout",
+		"timer",
+		"worker",
+		"web worker",
+		"web-worker"
+	]
+}
