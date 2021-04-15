@@ -1,4 +1,7 @@
+/* eslint-disable */
+
 // module is in scope (loaded by ./playground.html)
+const {setTimeoutWorker} = stow;
 
 (async () => {
 	try {

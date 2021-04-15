@@ -11,7 +11,7 @@ export default [{
 		file: 'dev-bundles/set-timeout-worker.js',
 		format: 'iife',
 		sourcemap: true,
-		name: 'setTimeoutWorker',
+		name: 'stow',
 	},
 }, {
 	input: 'tests/index.spec.ts',

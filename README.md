@@ -25,10 +25,10 @@ or
 
 ## Usage
 ```js
-// import or require
-import setTimeoutWorker from 'set-timeout-worker';
-// or:
-const setTimeoutWorker = require('set-timeout-worker');
+// import:
+import { setTimeoutWorker } from 'set-timeout-worker';
+// or require:
+const { setTimeoutWorker } = require('set-timeout-worker');
 
 // initialize
 setTimeoutWorker.start();

@@ -8,6 +8,7 @@
 		"dist",
 		"src"
 	],
+	"types": "./dist/index.d.ts",
 	"homepage": "https://github.com/taitulism/set-timeout-worker#readme",
 	"repository": "github:taitulism/set-timeout-worker",
 	"author": "Taitu Lizenbaum <taitu.dev@gmail.com>",
@@ -33,7 +34,6 @@
 		"@typescript-eslint/eslint-plugin": "^4.22.0",
 		"@typescript-eslint/parser": "^4.22.0",
 		"chai": "^4.3.4",
-		"chai-as-promised": "^7.1.1",
 		"eslint": "^7.25.0",
 		"karma": "^6.3.2",
 		"karma-chai": "^0.1.0",

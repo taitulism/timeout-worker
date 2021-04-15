@@ -1,42 +1,44 @@
+/* eslint-disable function-paren-newline */
 import { WorkerRequest, WorkerResponse, RequestMessage, TimeoutMsg } from './types';
 
-function workerOnMessage (ev: { data: RequestMessage; }) {
-	const {data: requestMsg} = ev;
+export function getWorkerOnMsgHandler (
+	postMessage?: (msg: any) => void
+): (ev: { data: RequestMessage }) => void {
+	return function workerOnMessageForMock (ev: { data: RequestMessage }): void {
+		const {data: requestMsg} = ev;
 
-	if (requestMsg.action === WorkerRequest.SetTimeout) {
-		const gotMsg = Date.now();
-		const {id, ms, wasSetAt} = requestMsg;
-		const delay = gotMsg - wasSetAt;
+		if (requestMsg.action === WorkerRequest.SetTimeout) {
+			const gotMsg = Date.now();
+			const {id, ms, wasSetAt} = requestMsg;
+			const delay = gotMsg - wasSetAt;
 
-		const ref = setTimeout(() => {
-			const now = Date.now();
-			const msg: TimeoutMsg = {
-				action: WorkerResponse.Timeout,
+			const ref = setTimeout(() => {
+				const now = Date.now();
+				const msg: TimeoutMsg = {
+					action: WorkerResponse.Timeout,
+					id,
+					workerTimestamp: now,
+					gotMsg
+				};
+
+				postMessage!(msg);
+			}, ms - delay);
+
+			postMessage!({
+				action: WorkerResponse.IsSet,
 				id,
-				workerTimestamp: now,
-				gotMsg
-			};
-
-			postMessage(msg);
-		}, ms - delay);
-
-		postMessage({
-			action: WorkerResponse.IsSet,
-			id,
-			ref,
-		});
-	}
-
-	else if (requestMsg.action === WorkerRequest.ClearTimeout) {
-		clearTimeout(requestMsg.ref);
-	}
+				ref,
+			});
+		}
+		else if (requestMsg.action === WorkerRequest.ClearTimeout) {
+			clearTimeout(requestMsg.ref);
+		}
+	};
 }
 
-const workerCode = `
-const WorkerRequest = JSON.parse('${JSON.stringify(WorkerRequest)}');
-const WorkerResponse = JSON.parse('${JSON.stringify(WorkerResponse)}');
+export const workerCode = `
+	const WorkerRequest = JSON.parse('${JSON.stringify(WorkerRequest)}');
+	const WorkerResponse = JSON.parse('${JSON.stringify(WorkerResponse)}');
 
-onmessage = ${workerOnMessage.toString()}
+	onmessage = ${getWorkerOnMsgHandler().toString()}
 `;
-
-export default workerCode;

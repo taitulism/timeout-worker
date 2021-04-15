@@ -5,7 +5,7 @@ export type ErrorHandler = (err: Error) => void;
 export type TimeoutCallback = (...args: Array<any>) => void;
 
 export interface SetTimeoutWorker {
-	start: () => this;
+	start: (workerClass?: Worker) => this;
 	stop: () => this;
 	onError: (callback: ErrorHandler) => void;
 	setTimeout: (callback: TimeoutCallback, ms: number, ...args: Array<any>) => Ref;

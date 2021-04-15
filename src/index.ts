@@ -1,4 +1,4 @@
-import workerCode from './worker-code';
+import { workerCode } from './worker-code';
 import { ON_ERROR_ARG_ERROR, WORKER_NOT_INITIALIZED_ERROR, getErrFromEvent } from './errors';
 import {
 	ResponseMessage,
@@ -18,7 +18,6 @@ const timers = new Map<number, TimeoutObj>();
 let errorHandler: ErrorHandler | null = null;
 let worker: Worker | null = null;
 let count = 1;
-
 
 function onMsgFromWorker (responseMsg: ResponseMessage) {
 	const {id} = responseMsg;
@@ -46,24 +45,32 @@ function onMsgFromWorker (responseMsg: ResponseMessage) {
 	}
 }
 
+export {
+	ResponseMessage,
+	TimeoutObj,
+	ErrorHandler,
+	TimeoutCallback,
+	Ref,
+	SetTimeoutWorker,
+};
 
-const setTimeoutWorker: SetTimeoutWorker = {
-	start (): SetTimeoutWorker {
+export const setTimeoutWorker: SetTimeoutWorker = {
+	start (workerInstance?: Worker): SetTimeoutWorker {
 		if (!worker) {
-			worker = new Worker(workerObjUrl);
+			worker = (workerInstance || new Worker(workerObjUrl)) as Worker;
 
-			worker.onmessage = (ev: { data: ResponseMessage; }) => {
+			worker.addEventListener('message', (ev: { data: ResponseMessage; }) => {
 				const {data} = ev;
 				onMsgFromWorker(data);
-			};
+			});
 
-			worker.onerror = (errEv: ErrorEvent) => {
+			worker.addEventListener('error', (errEv: ErrorEvent) => {
 				if (!errorHandler) return;
 				errEv.preventDefault();
 
 				const err = getErrFromEvent(errEv);
 				errorHandler(err);
-			};
+			});
 		}
 
 		return setTimeoutWorker;
@@ -122,5 +129,3 @@ const setTimeoutWorker: SetTimeoutWorker = {
 		return setTimeoutWorker;
 	},
 };
-
-export default setTimeoutWorker;
