@@ -1,8 +1,8 @@
 /* eslint-disable function-paren-newline */
-import { WorkerRequest, WorkerResponse, RequestMessage, TimeoutMsg } from './types';
+import { WorkerRequest, WorkerResponse, RequestMessage, TimeoutMsg, ResponseMessage } from './types';
 
 export function getWorkerOnMsgHandler (
-	postMessage?: (msg: any) => void
+	postMessage?: (msg: ResponseMessage) => void
 ): (ev: { data: RequestMessage }) => void {
 	return function workerOnMessageForMock (ev: { data: RequestMessage }): void {
 		const {data: requestMsg} = ev;
@@ -12,7 +12,7 @@ export function getWorkerOnMsgHandler (
 			const {id, ms, wasSetAt} = requestMsg;
 			const delay = gotMsg - wasSetAt;
 
-			const ref = setTimeout(() => {
+			const ref = self.setTimeout(() => {
 				const now = Date.now();
 				const msg: TimeoutMsg = {
 					action: WorkerResponse.Timeout,

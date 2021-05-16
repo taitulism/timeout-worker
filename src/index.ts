@@ -9,6 +9,7 @@ import {
 	TimeoutCallback,
 	TimeoutRef,
 	SetTimeoutWorker,
+	RequestMessage,
 } from './types';
 
 const blob = new Blob([workerCode], {type: 'application/javascript'});
@@ -97,7 +98,7 @@ export const setTimeoutWorker: SetTimeoutWorker = {
 			id,
 			ms,
 			wasSetAt,
-		});
+		} as RequestMessage);
 
 		timers.set(id, {
 			ref: null,
@@ -116,7 +117,7 @@ export const setTimeoutWorker: SetTimeoutWorker = {
 		worker && ref !== null && worker.postMessage({
 			action: WorkerRequest.ClearTimeout,
 			ref,
-		});
+		} as RequestMessage);
 
 		timers.delete(id);
 	},
