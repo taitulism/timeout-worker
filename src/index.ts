@@ -7,7 +7,7 @@ import {
 	WorkerResponse,
 	ErrorHandler,
 	TimeoutCallback,
-	Ref,
+	TimeoutRef,
 	SetTimeoutWorker,
 } from './types';
 
@@ -50,7 +50,7 @@ export {
 	TimeoutObj,
 	ErrorHandler,
 	TimeoutCallback,
-	Ref,
+	TimeoutRef,
 	SetTimeoutWorker,
 };
 
@@ -82,7 +82,11 @@ export const setTimeoutWorker: SetTimeoutWorker = {
 		errorHandler = callback;
 	},
 
-	setTimeout (callback: TimeoutCallback, ms: number, ...args: Array<any>): Ref {
+	setTimeout (
+		callback: TimeoutCallback,
+		ms: number,
+		...args: Array<any>
+	): TimeoutRef {
 		const wasSetAt = Date.now();
 		if (!worker) throw new Error(WORKER_NOT_INITIALIZED_ERROR);
 
@@ -104,7 +108,7 @@ export const setTimeoutWorker: SetTimeoutWorker = {
 		return id;
 	},
 
-	clearTimeout (id: Ref): void {
+	clearTimeout (id: TimeoutRef): void {
 		if (!timers.has(id)) return;
 
 		const ref = timers.get(id)!.ref;

@@ -1,4 +1,6 @@
-export type Ref = number;
+// type TimeoutRef = ReturnType<typeof setTimeout> | VoidFunction;
+
+export type TimeoutRef = number;
 export type Millisecond = number;
 export type Timestamp = number;
 export type ErrorHandler = (err: Error) => void;
@@ -8,8 +10,8 @@ export interface SetTimeoutWorker {
 	start: (workerClass?: Worker) => this;
 	stop: () => this;
 	onError: (callback: ErrorHandler) => void;
-	setTimeout: (callback: TimeoutCallback, ms: number, ...args: Array<any>) => Ref;
-	clearTimeout: (id: Ref) => void;
+	setTimeout: (callback: TimeoutCallback, ms: number, ...args: Array<any>) => TimeoutRef;
+	clearTimeout: (id: TimeoutRef) => void;
 }
 
 export enum WorkerRequest {
@@ -32,13 +34,13 @@ export type SetTimeoutMsg = {
 
 export type ClearTimeoutMsg = {
 	action: WorkerRequest.ClearTimeout;
-	ref: Ref,
+	ref: TimeoutRef,
 	id: number,
 }
 
 export type TimeoutIsSetMsg = {
 	action: WorkerResponse.IsSet;
-	ref: Ref,
+	ref: TimeoutRef,
 	id: number,
 }
 
@@ -58,7 +60,7 @@ export type RequestMessage = SetTimeoutMsg | ClearTimeoutMsg;
 export type ResponseMessage = TimeoutIsSetMsg | TimeoutMsg;
 
 export type TimeoutObj = {
-	ref: Ref | null;
+	ref: TimeoutRef | null;
 	fn: TimeoutCallback;
 	args: Array<any>;
 }
