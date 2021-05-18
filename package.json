@@ -1,7 +1,7 @@
 {
 	"name": "set-timeout-worker",
 	"description": "A dedicated web-worker for the `setTimeout` method. Client only. No server required.",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"license": "MIT",
 	"module": "./dist/src/index.js",
 	"files": [
