@@ -3,12 +3,12 @@
 	"description": "A dedicated web-worker for the `setTimeout` method. Client only. No server required.",
 	"version": "1.0.2",
 	"license": "MIT",
-	"module": "./dist/index.js",
+	"module": "./dist/src/index.js",
 	"files": [
 		"dist",
 		"src"
 	],
-	"types": "./dist/index.d.ts",
+	"types": "./dist/src/index.d.ts",
 	"homepage": "https://github.com/taitulism/set-timeout-worker#readme",
 	"repository": "github:taitulism/set-timeout-worker",
 	"author": "Taitu Lizenbaum <taitu.dev@gmail.com>",

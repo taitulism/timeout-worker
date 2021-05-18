@@ -10,6 +10,13 @@ import {
 	TimeoutRef,
 	SetTimeoutWorker,
 	RequestMessage,
+	Milliseconds,
+	Timestamp,
+	WorkerError,
+	TimeoutMsg,
+	TimeoutIsSetMsg,
+	ClearTimeoutMsg,
+	SetTimeoutMsg,
 } from './types';
 
 const blob = new Blob([workerCode], {type: 'application/javascript'});
@@ -47,13 +54,25 @@ function onMsgFromWorker (responseMsg: ResponseMessage) {
 }
 
 export {
+	RequestMessage,
 	ResponseMessage,
 	TimeoutObj,
 	ErrorHandler,
 	TimeoutCallback,
 	TimeoutRef,
 	SetTimeoutWorker,
+	Milliseconds,
+	Timestamp,
+	WorkerError,
+	TimeoutMsg,
+	TimeoutIsSetMsg,
+	ClearTimeoutMsg,
+	SetTimeoutMsg,
+	// WorkerRequest,
+	// WorkerResponse
 };
+
+export { MockWorker } from '../tests/mock-worker';
 
 export const setTimeoutWorker: SetTimeoutWorker = {
 	start (workerInstance?: Worker): SetTimeoutWorker {

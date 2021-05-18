@@ -1,10 +1,17 @@
 /* eslint-disable function-paren-newline */
 import { WorkerRequest, WorkerResponse, RequestMessage, TimeoutMsg, ResponseMessage } from './types';
 
-export function getWorkerOnMsgHandler (
+export const workerCode = `
+	const WorkerRequest = JSON.parse('${JSON.stringify(WorkerRequest)}');
+	const WorkerResponse = JSON.parse('${JSON.stringify(WorkerResponse)}');
+
+	onmessage = ${createWorkerMsgHandler().toString()}
+`;
+
+export function createWorkerMsgHandler (
 	postMessage?: (msg: ResponseMessage) => void
 ): (ev: { data: RequestMessage }) => void {
-	return function workerOnMessageForMock (ev: { data: RequestMessage }): void {
+	return function workerOnMessage (ev: { data: RequestMessage }): void {
 		const {data: requestMsg} = ev;
 
 		if (requestMsg.action === WorkerRequest.SetTimeout) {
@@ -36,9 +43,3 @@ export function getWorkerOnMsgHandler (
 	};
 }
 
-export const workerCode = `
-	const WorkerRequest = JSON.parse('${JSON.stringify(WorkerRequest)}');
-	const WorkerResponse = JSON.parse('${JSON.stringify(WorkerResponse)}');
-
-	onmessage = ${getWorkerOnMsgHandler().toString()}
-`;

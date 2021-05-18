@@ -1,7 +1,7 @@
 /* eslint-disable */
 
-import { RequestMessage, ResponseMessage, TimeoutMsg, WorkerRequest, WorkerResponse } from '../src/types';
-import { getWorkerOnMsgHandler } from '../src/worker-code';
+import { RequestMessage, ResponseMessage } from '../src/types';
+import { createWorkerMsgHandler } from '../src/worker-code';
 
 export class MockWorker implements Worker {
 	msgQueue: Array<any> = [];
@@ -14,7 +14,7 @@ export class MockWorker implements Worker {
 		options?: WorkerOptions | undefined
 	) {
 		this.url = url;
-		this.workerOnMessage = getWorkerOnMsgHandler(this.workerPostMessage);
+		this.workerOnMessage = createWorkerMsgHandler(this.workerPostMessage);
 	}
 
 	workerPostMessage = (msg: any) => {

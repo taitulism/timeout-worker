@@ -1,7 +1,7 @@
 // type TimeoutRef = ReturnType<typeof setTimeout> | VoidFunction;
 
 export type TimeoutRef = number;
-export type Millisecond = number;
+export type Milliseconds = number;
 export type Timestamp = number;
 export type ErrorHandler = (err: Error) => void;
 export type TimeoutCallback = (...args: Array<any>) => void;
@@ -28,7 +28,7 @@ export enum WorkerResponse {
 export type SetTimeoutMsg = {
 	action: WorkerRequest.SetTimeout;
 	id: number,
-	ms: Millisecond,
+	ms: Milliseconds,
 	wasSetAt: Timestamp,
 }
 
@@ -49,11 +49,6 @@ export type TimeoutMsg = {
 	id: number,
 	workerTimestamp: Timestamp;
 	gotMsg: Timestamp;
-}
-
-export enum Action {
-	SetTimeout,
-	ClearTimeout,
 }
 
 export type RequestMessage = SetTimeoutMsg | ClearTimeoutMsg;

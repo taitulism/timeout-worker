@@ -3,6 +3,5 @@
 	"exclude": ["./tests"],
 	"compilerOptions": {
 		"sourceMap": true,
-		"rootDir": "./src",
 	}
 }

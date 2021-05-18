@@ -52,8 +52,8 @@ module.exports = function karma (config) {
 			clearContext: false,
 			mocha: {
 				reporter: 'html',
-				timeout: 8000,
-				slow: 4000,
+				timeout: 5000,
+				slow: 1000,
 			},
 		},
 		browsers: [
