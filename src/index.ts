@@ -127,6 +127,7 @@ export const setTimeoutWorker: SetTimeoutWorker = {
 	},
 
 	clearTimeout (id: TimeoutRef): void {
+		if (!worker) throw new Error(WORKER_NOT_INITIALIZED_ERROR);
 		if (!timers.has(id)) return;
 
 		const ref = timers.get(id)!.ref;

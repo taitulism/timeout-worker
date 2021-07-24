@@ -3,6 +3,7 @@ import sinon from 'sinon';
 import chai from 'chai';
 import {setTimeoutWorker} from '../src/index';
 import { MockWorker } from './mock-worker';
+import { WORKER_NOT_INITIALIZED_ERROR } from '../src/errors';
 
 const {expect} = chai;
 
@@ -106,10 +107,12 @@ describe('setTimeoutWorker', () => {
 
 			it('throws when called without initializing a worker first', () => {
 				const spy = sinon.spy();
+
 				// no .start()
+
 				const throwingFn = () => setTimeoutWorker.setTimeout(spy, 1000);
 
-				return expect(throwingFn).to.throw('SetTimeoutWorker is not initialized.');
+				return expect(throwingFn).to.throw(WORKER_NOT_INITIALIZED_ERROR);
 			});
 
 			it('can be called multiple times', () => {
@@ -194,6 +197,14 @@ describe('setTimeoutWorker', () => {
 				expect(spy2.callCount).to.equal(1);
 
 				clock.restore();
+			});
+
+			it('throws when called when no active worker', () => {
+				// no .start()
+
+				const throwingFn = () => setTimeoutWorker.clearTimeout(1);
+
+				return expect(throwingFn).to.throw(WORKER_NOT_INITIALIZED_ERROR);
 			});
 		});
 
