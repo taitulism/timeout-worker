@@ -10,6 +10,8 @@ const sleep = (ms: number): Promise<void> => (
 	new Promise(resolve => setTimeout(resolve, ms))
 );
 
+const createMockWorker = (): Worker => new MockWorker('url');
+
 describe('setTimeoutWorker', () => {
 	afterEach(() => {
 		setTimeoutWorker.stop();
@@ -43,12 +45,12 @@ describe('setTimeoutWorker', () => {
 				expect(setTimeoutWorker.start().start().start()).to.deep.equal(setTimeoutWorker);
 			});
 
-			it('accepts a `Worker` class', () => {
+			it('accepts a Worker-like instance', () => {
 				const spy = sinon.spy();
 				const clock = sinon.useFakeTimers();
-				const mock: Worker = new MockWorker('mock-url');
+				const mockWorker = createMockWorker();
 
-				setTimeoutWorker.start(mock);
+				setTimeoutWorker.start(mockWorker);
 				setTimeoutWorker.setTimeout(spy, 500);
 
 				clock.tick(400);
@@ -88,9 +90,9 @@ describe('setTimeoutWorker', () => {
 			it('calls the callback on timeout', () => {
 				const spy = sinon.spy();
 				const clock = sinon.useFakeTimers();
-				const mock: Worker = new MockWorker('mock-url');
+				const mockWorker = createMockWorker();
 
-				setTimeoutWorker.start(mock);
+				setTimeoutWorker.start(mockWorker);
 				setTimeoutWorker.setTimeout(spy, 1000);
 
 				clock.tick(900);
@@ -111,9 +113,9 @@ describe('setTimeoutWorker', () => {
 			});
 
 			it('can be called multiple times', () => {
-				const mock: Worker = new MockWorker('mock-url');
+				const mockWorker = createMockWorker();
 
-				setTimeoutWorker.start(mock);
+				setTimeoutWorker.start(mockWorker);
 
 				const clock = sinon.useFakeTimers();
 				const spy1 = sinon.spy();
@@ -149,9 +151,9 @@ describe('setTimeoutWorker', () => {
 
 			it('calls the callback with additional arguments', () => {
 				const clock = sinon.useFakeTimers();
-				const mock: Worker = new MockWorker('mock-url');
+				const mockWorker = createMockWorker();
 
-				setTimeoutWorker.start(mock);
+				setTimeoutWorker.start(mockWorker);
 
 				const spy = sinon.spy();
 				const arg1 = 1;
@@ -176,9 +178,9 @@ describe('setTimeoutWorker', () => {
 				const clock = sinon.useFakeTimers();
 				const spy1 = sinon.spy();
 				const spy2 = sinon.spy();
-				const mock: Worker = new MockWorker('mock-url');
+				const mockWorker = createMockWorker();
 
-				setTimeoutWorker.start(mock);
+				setTimeoutWorker.start(mockWorker);
 				const ref1 = setTimeoutWorker.setTimeout(spy1, 1000);
 				const ref2 = setTimeoutWorker.setTimeout(spy2, 1000); // eslint-disable-line
 
@@ -198,9 +200,9 @@ describe('setTimeoutWorker', () => {
 		describe('stop', () => {
 			it('kills the worker and all of its timeouts', () => {
 				const clock = sinon.useFakeTimers();
-				const mock: Worker = new MockWorker('mock-url');
+				const mockWorker = createMockWorker();
 
-				setTimeoutWorker.start(mock);
+				setTimeoutWorker.start(mockWorker);
 
 				const spy1 = sinon.spy();
 				const spy2 = sinon.spy();

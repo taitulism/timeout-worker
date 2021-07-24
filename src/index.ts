@@ -72,12 +72,10 @@ export {
 	// WorkerResponse
 };
 
-export { MockWorker } from '../tests/mock-worker';
-
 export const setTimeoutWorker: SetTimeoutWorker = {
 	start (workerInstance?: Worker): SetTimeoutWorker {
 		if (!worker) {
-			worker = (workerInstance || new Worker(workerObjUrl)) as Worker;
+			worker = workerInstance || new Worker(workerObjUrl);
 
 			worker.addEventListener('message', (ev: { data: ResponseMessage; }) => {
 				const {data} = ev;
@@ -105,7 +103,7 @@ export const setTimeoutWorker: SetTimeoutWorker = {
 	setTimeout (
 		callback: TimeoutCallback,
 		ms: number,
-		...args: Array<any>
+		...args: Array<unknown>
 	): TimeoutRef {
 		const wasSetAt = Date.now();
 		if (!worker) throw new Error(WORKER_NOT_INITIALIZED_ERROR);

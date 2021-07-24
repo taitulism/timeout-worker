@@ -4,13 +4,13 @@ export type TimeoutRef = number;
 export type Milliseconds = number;
 export type Timestamp = number;
 export type ErrorHandler = (err: Error) => void;
-export type TimeoutCallback = (...args: Array<any>) => void;
+export type TimeoutCallback = (...args: Array<unknown>) => void;
 
 export interface SetTimeoutWorker {
 	start: (workerClass?: Worker) => this;
 	stop: () => this;
 	onError: (callback: ErrorHandler) => void;
-	setTimeout: (callback: TimeoutCallback, ms: number, ...args: Array<any>) => TimeoutRef;
+	setTimeout: (callback: TimeoutCallback, ms: number, ...args: Array<unknown>) => TimeoutRef;
 	clearTimeout: (id: TimeoutRef) => void;
 }
 
@@ -57,7 +57,7 @@ export type ResponseMessage = TimeoutIsSetMsg | TimeoutMsg;
 export type TimeoutObj = {
 	ref: TimeoutRef | null;
 	fn: TimeoutCallback;
-	args: Array<any>;
+	args: Array<unknown>;
 }
 
 export interface WorkerError extends Error {
