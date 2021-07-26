@@ -8,7 +8,7 @@ export default [{
 	input: 'src/index.ts',
 	plugins: [typescript()],
 	output: {
-		file: 'dev-bundles/set-timeout-worker.js',
+		file: 'dev-bundles/timeout-worker.js',
 		format: 'iife',
 		sourcemap: true,
 		name: 'stow',
@@ -17,7 +17,7 @@ export default [{
 	input: 'tests/index.spec.ts',
 	plugins: [nodeResolve(), commonjs(), typescript()],
 	output: {
-		file: 'dev-bundles/set-timeout-worker-spec.js',
+		file: 'dev-bundles/timeout-worker-spec.js',
 		sourcemap: true,
 		format: 'iife',
 	},

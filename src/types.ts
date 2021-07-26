@@ -6,7 +6,7 @@ export type Timestamp = number;
 export type ErrorHandler = (err: Error) => void;
 export type TimeoutCallback = (...args: Array<unknown>) => void;
 
-export interface SetTimeoutWorker {
+export interface TimeoutWorker {
 	start: (workerClass?: Worker) => this;
 	stop: () => this;
 	onError: (callback: ErrorHandler) => void;

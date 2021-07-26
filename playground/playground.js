@@ -1,26 +1,26 @@
 /* eslint-disable */
 
 // module is in scope (loaded by ./playground.html)
-const {setTimeoutWorker} = stow;
+const {timeoutWorker} = stow;
 
 (async () => {
 	try {
-		setTimeoutWorker.start().onError((err) => {
+		timeoutWorker.start().onError((err) => {
 			console.error(err);
 		})
 
-		const ref = setTimeoutWorker.setTimeout(() => {
+		const ref = timeoutWorker.setTimeout(() => {
 			console.log('whatever');
 		}, 1000);
 
-		// setTimeoutWorker.clearTimeout(ref);
+		// timeoutWorker.clearTimeout(ref);
 
 		// let i = 5_000_000;
 		// while (i >= 0) {
 		// 	i--;
 		// }
 
-		// setTimeoutWorker.setTimeout(() => {
+		// timeoutWorker.setTimeout(() => {
 		// 	console.log('whatever 2');
 		// }, 1500);
 
@@ -30,7 +30,7 @@ const {setTimeoutWorker} = stow;
 		// }
 
 		// const start = Date.now()
-		// setTimeoutWorker.setTimeout(() => {
+		// timeoutWorker.setTimeout(() => {
 		// 	const end = Date.now();
 		// 	console.log('*************');
 		// 	console.log('started', start);

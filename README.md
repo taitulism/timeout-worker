@@ -1,8 +1,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Build Status](https://travis-ci.org/taitulism/set-timeout-worker.svg?branch=master)](https://travis-ci.org/taitulism/set-timeout-worker)
+[![Build Status](https://travis-ci.org/taitulism/timeout-worker.svg?branch=master)](https://travis-ci.org/taitulism/timeout-worker)
 
 
-set-timeout-worker
+timeout-worker
 ==================
 A dedicated web-worker for the `setTimeout` method.
 Client only. No server required.
@@ -17,35 +17,35 @@ Using a web-worker for setting timeouts eliminates this issue.
 &nbsp;
 
 ## Install
-`$ npm install set-timeout-worker`  
+`$ npm install timeout-worker`  
 or  
-`$ yarn add set-timeout-worker`
+`$ yarn add timeout-worker`
 
 &nbsp;
 
 ## Usage
 ```js
 // import:
-import { setTimeoutWorker } from 'set-timeout-worker';
+import { timeoutWorker } from 'timeout-worker';
 // or require:
-const { setTimeoutWorker } = require('set-timeout-worker');
+const { timeoutWorker } = require('timeout-worker');
 
 // initialize
-setTimeoutWorker.start();
+timeoutWorker.start();
 
-const timeoutRef = setTimeoutWorker.setTimeout(() => {
+const timeoutRef = timeoutWorker.setTimeout(() => {
     // do somthing
 }, 3000)
 
-setTimeoutWorker.clearTimeout(timeoutRef);
+timeoutWorker.clearTimeout(timeoutRef);
 
 // terminate
-setTimeoutWorker.stop();
+timeoutWorker.stop();
 ```
 
 &nbsp;
 
-## `setTimeoutWorker`
+## `timeoutWorker`
 A singleton instance. It has the following methods:  
 * `.start()`
 * `.setTimeout(callback, ms)`
@@ -70,7 +70,7 @@ Sets a timeout in the worker scope. Returns a timeout reference (number) that ca
 **Calling `setTimeout` before initializing a worker will throw an error**. See `.start()` above.
 
 ```js
-setTimeoutWorker.setTimeout((a, b, c) => {
+timeoutWorker.setTimeout((a, b, c) => {
 
     console.log(a, b, c); // 1 2 3
 
@@ -86,9 +86,9 @@ Cancles an active timeout. Accept a timeout reference (returned by `setTimeout`)
 
 
 ```js
-const timeoutRef = setTimeoutWorker.setTimeout(callback, 1000);
+const timeoutRef = timeoutWorker.setTimeout(callback, 1000);
 
-setTimeoutWorker.clearTimeout(timeoutRef);
+timeoutWorker.clearTimeout(timeoutRef);
 ```
 
 
@@ -102,18 +102,18 @@ Terminates the worker, clearing any active timeouts. Will not set any new timeou
 ### `.onError(errorHandler)`
 Sets an error handler function to catch the worker's exceptions. The function will get called with an `Error`
 ```js
-setTimeoutWorker.onError((err) => {
+timeoutWorker.onError((err) => {
     console.error(err);
 });
 
 /*
-  Error: SetTimeoutWorker
+  Error: timeoutWorker
   Uncaught Error: Something Happend!
       Worker: blob:null/ce72fad0-bd41-46f7-9bea-fd405ab117c5
       Line: 7
       Col: 15
       Timestamp: 72.00000001466833
-      at Worker._worker.onerror (set-timeout-worker.js:58)
+      at Worker._worker.onerror (timeout-worker.js:58)
 */
 ```
 

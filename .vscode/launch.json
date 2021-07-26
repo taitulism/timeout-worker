@@ -19,7 +19,7 @@
 				"--timeout",
 				"999999",
 				"--colors",
-				"${workspaceFolder}/dev-bundles/set-timeout-worker-spec.js"
+				"${workspaceFolder}/dev-bundles/timeout-worker-spec.js"
 			]
 		}
 	]

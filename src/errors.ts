@@ -1,7 +1,7 @@
 import { WorkerError } from './types';
 
-export const ON_ERROR_ARG_ERROR = '.onError is expecting a function';
-export const WORKER_NOT_INITIALIZED_ERROR = 'SetTimeoutWorker is not initialized. Call `.start()`.';
+export const ON_ERROR_ARG_TYPE_ERROR = '.onError is expecting a function';
+export const WORKER_NOT_INITIALIZED_ERROR = 'timeoutWorker is not initialized. Call `.start()`.';
 
 export function getErrFromEvent (errEv: ErrorEvent): WorkerError {
 	const errMsg = getWorkerErrMsg(errEv);
@@ -17,7 +17,7 @@ export function getErrFromEvent (errEv: ErrorEvent): WorkerError {
 
 function getWorkerErrMsg (errEv: ErrorEvent): string {
 	return `\
-SetTimeoutWorker
+TimeoutWorker
 ${errEv.message}
 	Worker: ${errEv.filename}
 	Line: ${errEv.lineno}

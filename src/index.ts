@@ -1,5 +1,5 @@
 import { workerCode } from './worker-code';
-import { ON_ERROR_ARG_ERROR, WORKER_NOT_INITIALIZED_ERROR, getErrFromEvent } from './errors';
+import { ON_ERROR_ARG_TYPE_ERROR, WORKER_NOT_INITIALIZED_ERROR, getErrFromEvent } from './errors';
 import {
 	ResponseMessage,
 	TimeoutObj,
@@ -8,7 +8,7 @@ import {
 	ErrorHandler,
 	TimeoutCallback,
 	TimeoutRef,
-	SetTimeoutWorker,
+	TimeoutWorker,
 	RequestMessage,
 	Milliseconds,
 	Timestamp,
@@ -60,7 +60,7 @@ export {
 	ErrorHandler,
 	TimeoutCallback,
 	TimeoutRef,
-	SetTimeoutWorker,
+	TimeoutWorker,
 	Milliseconds,
 	Timestamp,
 	WorkerError,
@@ -72,8 +72,8 @@ export {
 	// WorkerResponse
 };
 
-export const setTimeoutWorker: SetTimeoutWorker = {
-	start (workerInstance?: Worker): SetTimeoutWorker {
+export const timeoutWorker: TimeoutWorker = {
+	start (workerInstance?: Worker): TimeoutWorker {
 		if (!worker) {
 			worker = workerInstance || new Worker(workerObjUrl);
 
@@ -91,11 +91,11 @@ export const setTimeoutWorker: SetTimeoutWorker = {
 			});
 		}
 
-		return setTimeoutWorker;
+		return timeoutWorker;
 	},
 
 	onError (callback: ErrorHandler): void {
-		if (typeof callback !== 'function') throw new Error(ON_ERROR_ARG_ERROR);
+		if (typeof callback !== 'function') throw new Error(ON_ERROR_ARG_TYPE_ERROR);
 
 		errorHandler = callback;
 	},
@@ -140,7 +140,7 @@ export const setTimeoutWorker: SetTimeoutWorker = {
 		timers.delete(id);
 	},
 
-	stop (): SetTimeoutWorker {
+	stop (): TimeoutWorker {
 		if (worker) {
 			worker.terminate();
 			worker = null;
@@ -149,6 +149,6 @@ export const setTimeoutWorker: SetTimeoutWorker = {
 			count = 1;
 		}
 
-		return setTimeoutWorker;
+		return timeoutWorker;
 	},
 };

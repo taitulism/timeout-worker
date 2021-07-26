@@ -1,7 +1,7 @@
 import sinon from 'sinon';
 
 import chai from 'chai';
-import {setTimeoutWorker} from '../src/index';
+import { timeoutWorker } from '../src/index';
 import { MockWorker } from './mock-worker';
 import { WORKER_NOT_INITIALIZED_ERROR } from '../src/errors';
 
@@ -13,37 +13,37 @@ const sleep = (ms: number): Promise<void> => (
 
 const createMockWorker = (): Worker => new MockWorker('url');
 
-describe('setTimeoutWorker', () => {
+describe('timeoutWorker', () => {
 	afterEach(() => {
-		setTimeoutWorker.stop();
+		timeoutWorker.stop();
 	});
 
 	describe('worker', () => {
 		describe('methods', () => {
 			it('.start()', () => {
-				expect(setTimeoutWorker.start).to.be.a('function');
+				expect(timeoutWorker.start).to.be.a('function');
 			});
 
 			it('.stop()', () => {
-				expect(setTimeoutWorker.stop).to.be.a('function');
+				expect(timeoutWorker.stop).to.be.a('function');
 			});
 
 			it('.setTimeout()', () => {
-				expect(setTimeoutWorker.setTimeout).to.be.a('function');
+				expect(timeoutWorker.setTimeout).to.be.a('function');
 			});
 
 			it('.clearTimeout()', () => {
-				expect(setTimeoutWorker.clearTimeout).to.be.a('function');
+				expect(timeoutWorker.clearTimeout).to.be.a('function');
 			});
 		});
 
 		describe('start', () => {
 			it('initializes the worker successfully', () => (
-				expect(() => setTimeoutWorker.start()).not.to.throw()
+				expect(() => timeoutWorker.start()).not.to.throw()
 			));
 
 			it('doesn\'t fail when called multiple times', () => {
-				expect(setTimeoutWorker.start().start().start()).to.deep.equal(setTimeoutWorker);
+				expect(timeoutWorker.start().start().start()).to.deep.equal(timeoutWorker);
 			});
 
 			it('accepts a Worker-like instance', () => {
@@ -51,8 +51,8 @@ describe('setTimeoutWorker', () => {
 				const clock = sinon.useFakeTimers();
 				const mockWorker = createMockWorker();
 
-				setTimeoutWorker.start(mockWorker);
-				setTimeoutWorker.setTimeout(spy, 500);
+				timeoutWorker.start(mockWorker);
+				timeoutWorker.setTimeout(spy, 500);
 
 				clock.tick(400);
 				expect(spy.callCount).to.equal(0);
@@ -69,8 +69,8 @@ describe('setTimeoutWorker', () => {
 				const spy = sinon.spy();
 				const windowSetTimeout = sinon.spy(window, 'setTimeout');
 
-				setTimeoutWorker.start();
-				setTimeoutWorker.setTimeout(spy, 600);
+				timeoutWorker.start();
+				timeoutWorker.setTimeout(spy, 600);
 
 				expect(spy.callCount).to.equal(0);
 				expect(windowSetTimeout.callCount).to.equal(0);
@@ -93,8 +93,8 @@ describe('setTimeoutWorker', () => {
 				const clock = sinon.useFakeTimers();
 				const mockWorker = createMockWorker();
 
-				setTimeoutWorker.start(mockWorker);
-				setTimeoutWorker.setTimeout(spy, 1000);
+				timeoutWorker.start(mockWorker);
+				timeoutWorker.setTimeout(spy, 1000);
 
 				clock.tick(900);
 				expect(spy.callCount).to.equal(0);
@@ -110,7 +110,7 @@ describe('setTimeoutWorker', () => {
 
 				// no .start()
 
-				const throwingFn = () => setTimeoutWorker.setTimeout(spy, 1000);
+				const throwingFn = () => timeoutWorker.setTimeout(spy, 1000);
 
 				return expect(throwingFn).to.throw(WORKER_NOT_INITIALIZED_ERROR);
 			});
@@ -118,7 +118,7 @@ describe('setTimeoutWorker', () => {
 			it('can be called multiple times', () => {
 				const mockWorker = createMockWorker();
 
-				setTimeoutWorker.start(mockWorker);
+				timeoutWorker.start(mockWorker);
 
 				const clock = sinon.useFakeTimers();
 				const spy1 = sinon.spy();
@@ -126,10 +126,10 @@ describe('setTimeoutWorker', () => {
 				const spy3 = sinon.spy();
 				const spy4 = sinon.spy();
 
-				setTimeoutWorker.setTimeout(spy1, 1000);
-				setTimeoutWorker.setTimeout(spy2, 1100);
-				setTimeoutWorker.setTimeout(spy3, 1100);
-				setTimeoutWorker.setTimeout(spy4, 1200);
+				timeoutWorker.setTimeout(spy1, 1000);
+				timeoutWorker.setTimeout(spy2, 1100);
+				timeoutWorker.setTimeout(spy3, 1100);
+				timeoutWorker.setTimeout(spy4, 1200);
 
 				clock.tick(1001);
 				expect(spy1.callCount).to.equal(1);
@@ -156,14 +156,14 @@ describe('setTimeoutWorker', () => {
 				const clock = sinon.useFakeTimers();
 				const mockWorker = createMockWorker();
 
-				setTimeoutWorker.start(mockWorker);
+				timeoutWorker.start(mockWorker);
 
 				const spy = sinon.spy();
 				const arg1 = 1;
 				const arg2 = {a:1, b:2};
 				const arg3 = ['a', 'b', 'c'];
 
-				setTimeoutWorker.setTimeout(spy, 1000, arg1, arg2, arg3);
+				timeoutWorker.setTimeout(spy, 1000, arg1, arg2, arg3);
 
 				clock.tick(900);
 				expect(spy.calledOnce).to.be.false;
@@ -183,14 +183,14 @@ describe('setTimeoutWorker', () => {
 				const spy2 = sinon.spy();
 				const mockWorker = createMockWorker();
 
-				setTimeoutWorker.start(mockWorker);
-				const ref1 = setTimeoutWorker.setTimeout(spy1, 1000);
-				const ref2 = setTimeoutWorker.setTimeout(spy2, 1000); // eslint-disable-line
+				timeoutWorker.start(mockWorker);
+				const ref1 = timeoutWorker.setTimeout(spy1, 1000);
+				const ref2 = timeoutWorker.setTimeout(spy2, 1000); // eslint-disable-line
 
 				clock.tick(900);
 				expect(spy1.callCount).to.equal(0);
 				expect(spy2.callCount).to.equal(0);
-				setTimeoutWorker.clearTimeout(ref1);
+				timeoutWorker.clearTimeout(ref1);
 
 				clock.tick(101);
 				expect(spy1.callCount).to.equal(0);
@@ -202,7 +202,7 @@ describe('setTimeoutWorker', () => {
 			it('throws when called when no active worker', () => {
 				// no .start()
 
-				const throwingFn = () => setTimeoutWorker.clearTimeout(1);
+				const throwingFn = () => timeoutWorker.clearTimeout(1);
 
 				return expect(throwingFn).to.throw(WORKER_NOT_INITIALIZED_ERROR);
 			});
@@ -213,22 +213,22 @@ describe('setTimeoutWorker', () => {
 				const clock = sinon.useFakeTimers();
 				const mockWorker = createMockWorker();
 
-				setTimeoutWorker.start(mockWorker);
+				timeoutWorker.start(mockWorker);
 
 				const spy1 = sinon.spy();
 				const spy2 = sinon.spy();
 				const spy3 = sinon.spy();
 
-				setTimeoutWorker.setTimeout(spy1, 1000);
-				setTimeoutWorker.setTimeout(spy2, 1000);
-				setTimeoutWorker.setTimeout(spy3, 1000);
+				timeoutWorker.setTimeout(spy1, 1000);
+				timeoutWorker.setTimeout(spy2, 1000);
+				timeoutWorker.setTimeout(spy3, 1000);
 
 				clock.tick(900);
 				expect(spy1.callCount).to.equal(0);
 				expect(spy2.callCount).to.equal(0);
 				expect(spy3.callCount).to.equal(0);
 
-				setTimeoutWorker.stop();
+				timeoutWorker.stop();
 
 				clock.tick(110);
 				expect(spy1.callCount).to.equal(0);
@@ -239,11 +239,11 @@ describe('setTimeoutWorker', () => {
 			});
 
 			it('doesn\'t fail when called first', () => {
-				expect(() => setTimeoutWorker.stop()).not.to.throw();
+				expect(() => timeoutWorker.stop()).not.to.throw();
 			});
 
 			it('doesn\'t fail when called multiple times', () => {
-				expect(() => setTimeoutWorker.stop().stop().stop()).not.to.throw();
+				expect(() => timeoutWorker.stop().stop().stop()).not.to.throw();
 			});
 		});
 	});
