@@ -10,7 +10,7 @@ Client only. No server required.
 &nbsp;
 
 ## Why?
-When the current tab loses focus the browser throttles its timeouts and they become inaccurate when setting short timeout periods. This behavior is inconsistent between different browsers and the subject is not well documented. 
+When the browser's current tab loses focus, the browser throttles the tab's timeouts and they become inaccurate, especially when setting short timeout periods (like in a ticking clock or a metronome). This behavior is inconsistent between different browsers and the subject is not well documented. 
 
 Using a web-worker for setting timeouts eliminates this issue.
 
