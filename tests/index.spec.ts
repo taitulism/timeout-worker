@@ -116,11 +116,11 @@ describe('timeoutWorker', () => {
 			});
 
 			it('can be called multiple times', () => {
-				const mockWorker = createMockWorker();
+				const clock = sinon.useFakeTimers();
 
+				const mockWorker = createMockWorker();
 				timeoutWorker.start(mockWorker);
 
-				const clock = sinon.useFakeTimers();
 				const spy1 = sinon.spy();
 				const spy2 = sinon.spy();
 				const spy3 = sinon.spy();

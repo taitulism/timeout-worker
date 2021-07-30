@@ -1,6 +1,6 @@
-// type TimeoutRef = ReturnType<typeof setTimeout> | VoidFunction;
+/* eslint-disable no-magic-numbers */
 
-export type TimeoutRef = number;
+export type TimeoutRef = ReturnType<typeof setTimeout> | number;
 export type Milliseconds = number;
 export type Timestamp = number;
 export type ErrorHandler = (err: Error) => void;
@@ -14,45 +14,44 @@ export interface TimeoutWorker {
 	clearTimeout: (id: TimeoutRef) => void;
 }
 
-export enum WorkerRequest {
-	SetTimeout,
-	ClearTimeout,
-}
+export const WorkerRequest = {
+	SetTimeout: 0,
+	ClearTimeout: 1,
+} as const;
 
-export enum WorkerResponse {
-	IsSet,
-	Timeout,
-	Cleared,
-}
+export const WorkerResponse = {
+	TimeoutIsSet: 2,
+	TimesUp: 3,
+} as const;
 
 export type SetTimeoutMsg = {
-	action: WorkerRequest.SetTimeout;
+	action: typeof WorkerRequest.SetTimeout;
 	id: number,
 	ms: Milliseconds,
 	wasSetAt: Timestamp,
 }
 
 export type ClearTimeoutMsg = {
-	action: WorkerRequest.ClearTimeout;
+	action: typeof WorkerRequest.ClearTimeout;
 	ref: TimeoutRef,
 	id: number,
 }
 
 export type TimeoutIsSetMsg = {
-	action: WorkerResponse.IsSet;
+	action: typeof WorkerResponse.TimeoutIsSet;
 	ref: TimeoutRef,
 	id: number,
 }
 
-export type TimeoutMsg = {
-	action: WorkerResponse.Timeout;
+export type TimesUpMsg = {
+	action: typeof WorkerResponse.TimesUp;
 	id: number,
 	workerTimestamp: Timestamp;
 	gotMsg: Timestamp;
 }
 
 export type RequestMessage = SetTimeoutMsg | ClearTimeoutMsg;
-export type ResponseMessage = TimeoutIsSetMsg | TimeoutMsg;
+export type ResponseMessage = TimeoutIsSetMsg | TimesUpMsg;
 
 export type TimeoutObj = {
 	ref: TimeoutRef | null;

@@ -1,56 +1,73 @@
-/* eslint-disable */
+/* eslint-disable
+	lines-between-class-members,
+	class-methods-use-this,
+	no-console,
+*/
 
-import { RequestMessage, ResponseMessage } from '../src/types';
+import { RequestMessage, ResponseMessage, WorkerError, WorkerRequest, WorkerResponse } from '../src/types';
 import { createWorkerMsgHandler } from '../src/worker-code';
 
+interface MsgEvent extends Event {data: ResponseMessage}
+interface ErrEvent extends Event {data: WorkerError}
+
+type MsgEventHandler = (event: MsgEvent) => void
+type ErrEventHandler = (event: ErrEvent) => void
+
 export class MockWorker implements Worker {
-	msgQueue: Array<any> = [];
-	errQueue: Array<any> = [];
+	private msgQueue: Array<MsgEventHandler> = [];
+	private errQueue: Array<ErrEventHandler> = [];
+	private workerOnMessage: ReturnType<typeof createWorkerMsgHandler>;
+
 	url: string | URL;
-	workerOnMessage: any;
 
-	constructor (
-		url: string | URL,
-		options?: WorkerOptions | undefined
-	) {
+	constructor (url: string | URL) {
 		this.url = url;
-		this.workerOnMessage = createWorkerMsgHandler(this.workerPostMessage);
+		this.workerOnMessage = createWorkerMsgHandler(
+			this.workerPostMessage,
+			WorkerRequest,
+			WorkerResponse,
+		);
 	}
 
-	workerPostMessage = (msg: any) => {
+	workerPostMessage = (msg: ResponseMessage): void => {
 		setTimeout(() => {
-			const event = {data: msg};
-			this.msgQueue.forEach((callback) => {
-				callback(event);
-			});
-		}, 1);
-	}
+			const event = new Event('msg-from-worker');
+			const ev = Object.create(event);
+			ev.data = msg;
 
-	addEventListener (eventName: string, callback: any) {
-		if (eventName === 'message') {
-			this.msgQueue.push(callback);
-		}
-		else if (eventName === 'error') {
-			this.errQueue.push(callback);
-		}
-	}
-
-	dispatchEvent (ev: Event) { return true; }
-	onerror (ev: Event) { }
-	onmessageerror () { }
-	onmessage (ev: {data: ResponseMessage}) {}
-
-	postMessage (reqMsg: RequestMessage) {
-		setTimeout(() => {
-			this.workerOnMessage({data: reqMsg});
+			this.msgQueue.forEach(callback => callback(ev));
 		}, 0);
 	}
 
-	removeEventListener () {
+	addEventListener (eventName: string, callback: EventListener): void {
+		if (eventName === 'message') {
+			this.msgQueue.push(callback as MsgEventHandler);
+		}
+		else if (eventName === 'error') {
+			this.errQueue.push(callback as ErrEventHandler);
+		}
+	}
+
+	dispatchEvent (ev: Event): boolean { console.log('dispatchEvent', ev); return true; }
+	onerror (ev: Event): void { console.log('onerror', ev); }
+	onmessageerror (): void { console.log('onmessageerror'); }
+	onmessage (ev: {data: ResponseMessage}): void { console.log(ev); }
+
+	postMessage (reqMsg: RequestMessage): void {
+		setTimeout(() => {
+			const event = new Event('worker-got-msg');
+			const ev = Object.create(event);
+			ev.data = reqMsg;
+
+			this.workerOnMessage(ev);
+		}, 0);
+	}
+
+	removeEventListener (): void {
 		console.log('removeEventListener');
 	}
 
-	terminate () {
+	terminate (): void {
 		this.msgQueue = [];
 		this.errQueue = [];
 		this.url = '';

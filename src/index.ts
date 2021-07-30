@@ -3,25 +3,18 @@ import { ON_ERROR_ARG_TYPE_ERROR, WORKER_NOT_INITIALIZED_ERROR, getErrFromEvent 
 import {
 	ResponseMessage,
 	TimeoutObj,
-	WorkerRequest,
-	WorkerResponse,
 	ErrorHandler,
 	TimeoutCallback,
 	TimeoutRef,
 	TimeoutWorker,
 	RequestMessage,
-	Milliseconds,
-	Timestamp,
-	WorkerError,
-	TimeoutMsg,
-	TimeoutIsSetMsg,
-	ClearTimeoutMsg,
-	SetTimeoutMsg,
+	WorkerRequest,
+	WorkerResponse,
 } from './types';
 
 const blob = new Blob([workerCode], {type: 'application/javascript'});
 const workerObjUrl = URL.createObjectURL(blob);
-const timers = new Map<number, TimeoutObj>();
+const timers = new Map<TimeoutRef, TimeoutObj>();
 
 let errorHandler: ErrorHandler | null = null;
 let worker: Worker | null = null;
@@ -30,7 +23,7 @@ let count = 1;
 function onMsgFromWorker (responseMsg: ResponseMessage) {
 	const {id} = responseMsg;
 
-	if (responseMsg.action === WorkerResponse.IsSet) {
+	if (responseMsg.action === WorkerResponse.TimeoutIsSet) {
 		if (!timers.has(id)) {
 			// Timeout was cleared before it was set.
 			return worker && worker.postMessage({
@@ -41,7 +34,7 @@ function onMsgFromWorker (responseMsg: ResponseMessage) {
 
 		timers.get(id)!.ref = responseMsg.ref;
 	}
-	else if (responseMsg.action === WorkerResponse.Timeout) {
+	else if (responseMsg.action === WorkerResponse.TimesUp) {
 		if (!timers.has(id)) return;
 
 		const timeoutItem = timers.get(id);
@@ -53,24 +46,7 @@ function onMsgFromWorker (responseMsg: ResponseMessage) {
 	}
 }
 
-export {
-	RequestMessage,
-	ResponseMessage,
-	TimeoutObj,
-	ErrorHandler,
-	TimeoutCallback,
-	TimeoutRef,
-	TimeoutWorker,
-	Milliseconds,
-	Timestamp,
-	WorkerError,
-	TimeoutMsg,
-	TimeoutIsSetMsg,
-	ClearTimeoutMsg,
-	SetTimeoutMsg,
-	// WorkerRequest,
-	// WorkerResponse
-};
+export * from './types';
 
 export const timeoutWorker: TimeoutWorker = {
 	start (workerInstance?: Worker): TimeoutWorker {

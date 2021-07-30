@@ -18,8 +18,6 @@ Using a web-worker for setting timeouts eliminates this issue.
 
 ## Install
 `$ npm install timeout-worker`  
-or  
-`$ yarn add timeout-worker`
 
 &nbsp;
 
