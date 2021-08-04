@@ -1,6 +1,6 @@
 /* eslint-disable no-magic-numbers */
 
-export type TimeoutRef = ReturnType<typeof setTimeout> | number;
+export type TimeoutRef = number;
 export type Milliseconds = number;
 export type Timestamp = number;
 export type ErrorHandler = (err: Error) => void;
